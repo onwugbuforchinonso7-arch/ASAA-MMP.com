@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASAA MeetingHub | Meeting Management</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#dashboard">◆ASAA MeetingHub</a>
+    <p class="nav-heading">WORKSPACE</p>
+    <a class="nav-link active" href="#dashboard">▦ Dashboard</a>
+    <a class="nav-link" href="#members">♙ Members</a>
+    <a class="nav-link" href="#meetings">▣ Meetings</a>
+    <a class="nav-link" href="#expenses">₦ Expenses</a>
+    <a class="nav-link" href="#recorder">🎙 Recorder</a>
+    <div class="sidebar-bottom">
+      <span class="avatar">AMH</span>
+      <div><strong>ASAA MeetingHub</strong><small>Group workspace</small></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">GROUP MANAGEMENT</p>
+        <h1>Meeting Dashboard</h1>
+        <p class="muted">Manage members, meetings and group finances.</p>
+      </div>
+      <label class="role-picker">Current role
+        <select id="roleSelect">
+          <option value="chair">Chairperson</option>
+          <option value="secretary">Financial Secretary</option>
+          <option value="member">Member / Viewer</option>
+        </select>
+      </label>
+    </header>
+
+    <div class="notice">
+      <strong>Demo mode:</strong> Role selection is for testing only.
+      It is not secure authentication.
+    </div>
+
+    <section id="dashboard" class="stats">
+      <article class="stat-card">
+        <span class="stat-icon">♙</span>
+        <p>Active Members</p>
+        <h2 id="memberTotal">0</h2>
+        <small>Current group members</small>
+      </article>
+      <article class="stat-card">
+        <span class="stat-icon">▣</span>
+        <p>Meetings Recorded</p>
+        <h2 id="meetingTotal">0</h2>
+        <small>Meeting notes saved</small>
+      </article>
+      <article class="stat-card">
+        <span class="stat-icon">₦</span>
+        <p>Total Expenses</p>
+        <h2 id="expenseTotal">₦0.00</h2>
+        <small>Recorded group spending</small>
+      </article>
+    </section>
+
+    <section class="panel" id="members">
+      <div class="section-heading">
+        <div>
+          <h2>Member Management</h2>
+          <p class="muted">Register members and update group membership.</p>
+        </div>
+      </div>
+
+      <form id="memberForm" class="form-grid">
+        <label>Full name
+          <input id="memberName" required maxlength="80"
+            placeholder="Enter member's name">
+        </label>
+        <label>Phone (optional)
+          <input id="memberPhone" type="tel" maxlength="30"
+            placeholder="Phone number">
+        </label>
+        <label>Group position
+          <select id="memberPosition">
+            <option>Member</option>
+            <option>Chairperson</option>
+            <option>Financial Secretary</option>
+            <option>Secretary</option>
+            <option>Treasurer</option>
+          </select>
+        </label>
+        <div class="field-end">
+          <button class="primary-btn" type="submit">+ Add Member</button>
+        </div>
+      </form>
+
+      <div class="toolbar">
+        <input id="memberSearch" type="search"
+          placeholder="Search members..." aria-label="Search members">
+        <select id="memberFilter" aria-label="Filter members">
+          <option value="active">Active members</option>
+          <option value="left">Former members</option>
+          <option value="all">All members</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Member</th><th>Phone</th><th>Position</th>
+            <th>Status</th><th>Action</th>
+          </tr></thead>
+          <tbody id="memberTable"></tbody>
+        </table>
+      </div>
+      <p id="memberEmpty" class="empty hidden">No members found.</p>
+    </section>
+
+    <section class="panel" id="meetings">
+      <div class="section-heading">
+        <div>
+          <h2>Meeting Records</h2>
+          <p class="muted">Save agendas, decisions and meeting minutes.</p>
+        </div>
+      </div>
+
+      <form id="meetingForm" class="form-grid">
+        <label>Meeting title
+          <input id="meetingTitle" required maxlength="120"
+            placeholder="e.g. Monthly Group Meeting">
+        </label>
+        <label>Date
+          <input id="meetingDate" type="date" required>
+        </label>
+        <label class="wide-field">Agenda and discussion notes
+          <textarea id="meetingNotes" rows="3" maxlength="10000"
+            placeholder="Agenda, decisions and action points..."></textarea>
+        </label>
+        <div class="field-end">
+          <button class="primary-btn" type="submit">Save Meeting</button>
+        </div>
+      </form>
+
+      <div id="meetingList" class="record-list"></div>
+    </section>
+
+    <section class="panel" id="expenses">
+      <div class="section-heading">
+        <div>
+          <h2>Meeting Expenses</h2>
+          <p class="muted">Keep track of money spent by the group.</p>
+        </div>
+      </div>
+
+      <div class="expense-summary">
+        <div><small>Total expenses</small><h2 id="expenseSummary">₦0.00</h2></div>
+        <div><small>Number of entries</small><h2 id="expenseCount">0</h2></div>
+      </div>
+
+      <form id="expenseForm" class="form-grid">
+        <label>Expense description
+          <input id="expenseDescription" required maxlength="120"
+            placeholder="e.g. Refreshments">
+        </label>
+        <label>Amount (NGN ₦)
+          <input id="expenseAmount" type="number" min="0.01"
+            max="1000000000" step="0.01" required placeholder="5000">
+        </label>
+        <label>Date
+          <input id="expenseDate" type="date" required>
+        </label>
+        <label>Category
+          <select id="expenseCategory">
+            <option>Refreshments</option>
+            <option>Transport</option>
+            <option>Venue</option>
+            <option>Materials</option>
+            <option>Communication</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <div class="field-end">
+          <button class="primary-btn" type="submit">+ Record Expense</button>
+        </div>
+      </form>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Description</th><th>Category</th><th>Date</th>
+            <th>Amount</th><th>Action</th>
+          </tr></thead>
+          <tbody id="expenseTable"></tbody>
+        </table>
+      </div>
+      <p id="expenseEmpty" class="empty hidden">No expenses recorded yet.</p>
+      <button id="exportExpenses" class="secondary-btn" type="button">
+        ↓ Export Expenses CSV
+      </button>
+    </section>
+
+    <section class="panel" id="recorder">
+      <div class="section-heading">
+        <div>
+          <h2>Meeting Voice Recorder</h2>
+          <p class="muted">Record audio using your device's microphone.</p>
+        </div>
+        <span id="recorderBadge" class="badge">Ready</span>
+      </div>
+
+      <div class="notice">
+        Tell everyone that recording is taking place and obtain consent.
+        This records microphone audio; it does not automatically transcribe
+        everything people say.
+      </div>
+
+      <div id="recorderLock" class="lock-message hidden">
+        🔒 Recording is restricted to the chairperson and financial secretary.
+      </div>
+
+      <label>Recording title
+        <input id="recordingTitle" maxlength="120"
+          placeholder="e.g. October meeting recording">
+      </label>
+
+      <div class="recorder-display">
+        <span class="mic-circle">🎙</span>
+        <strong id="recordingTime">00:00</strong>
+        <p id="recorderStatus" class="muted">Ready to record</p>
+      </div>
+
+      <div class="recorder-controls">
+        <button id="startRecording" class="primary-btn" type="button">
+          ● Start Recording
+        </button>
+        <button id="pauseRecording" class="secondary-btn" type="button"
+          disabled>Ⅱ Pause</button>
+        <button id="stopRecording" class="secondary-btn" type="button"
+          disabled>■ Stop</button>
+      </div>
+
+      <p id="recorderMessage" class="message" role="status"
+        aria-live="polite"></p>
+
+      <h3>Saved in this session</h3>
+      <p class="muted small">Download recordings to keep them after closing
+        or refreshing this page.</p>
+      <div id="recordingList" class="record-list"></div>
+    </section>
+
+    <footer>ASAA MeetingHub © 2026 · A co-operative group & join us </footer>
+  </main>
+</body>
+</html>
